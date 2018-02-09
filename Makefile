@@ -8,5 +8,6 @@
 include .make/Makefile.inc
 
 NS              ?= default
-APP             ?= app
+APP             ?= gitlab-runner
+HOST            ?= gitlab.yomateo.io
 export

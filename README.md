@@ -24,7 +24,10 @@
 ## Install
 
 ```sh
+$ make install
 
+[ INSTALLING MANIFESTS/CONFIGMAP.YAML ]: configmap "gitlab-runner" created
+[ INSTALLING MANIFESTS/DEPLOYMENT.YAML ]: deployment "gitlab-runner" created
 ```
 
 ## Delete
