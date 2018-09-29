@@ -1,45 +1,34 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: gitlab-runner
+  name: $APP
 spec:
-  replicas: 1
+  replicas: $REPLICAS
   selector:
     matchLabels:
-      name: gitlab-runner
+      name: $APP
   template:
     metadata:
       labels:
-        name: gitlab-runner
-        app: gitlab-runner
+        name: $APP
     spec:
       containers:
-        - name: gitlab-runner
-          image: gitlab/gitlab-runner:alpine
-          command: ["/bin/bash", "/scripts/entrypoint"]
-          env:
-            - name: KUBERNETES_SERVICE_ACCOUNT
-              value: gitlab-ci
-            - name: GITLAB_URL
-              value: "https://$HOST/"
-            - name: REGISTRATION_TOKEN
-              value: _81SkfMzmKUVQsckaUjV
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: gitlab-runner-secret
-            #       key: runner-registration-token
-          imagePullPolicy: Always
-          volumeMounts:
-            - name: config
-              mountPath: /scripts
-            - name: cacerts
-              mountPath: /etc/gitlab-runner/certs
-              readOnly: true
+      - args:
+        - run
+        image: gitlab/gitlab-runner:latest
+        imagePullPolicy: Always
+        name: $APP
+        volumeMounts:
+        - mountPath: /etc/gitlab-runner
+          name: config
+        - mountPath: /etc/ssl/certs
+          name: cacerts
+          readOnly: true
       restartPolicy: Always
       volumes:
-        - name: config
-          configMap:
-            name: gitlab-runner-cm
-        - name: cacerts
-          hostPath:
-            path: /var/mozilla
+      - configMap:
+          name: $APP
+        name: config
+      - hostPath:
+          path: /usr/share/ca-certificates/mozilla
+        name: cacerts

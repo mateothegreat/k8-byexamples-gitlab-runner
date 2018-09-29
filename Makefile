@@ -7,9 +7,6 @@
 #
 include .make/Makefile.inc
 
-NS              ?= default
-APP             ?= gitlab-runner
-HOST            ?= gitlab.yomateo.io
-RUNNER_NAME = kube
-GITLAB_CI_TOKEN           ?= _81SkfMzmKUVQsckaUjV
-export
+NS              	?= default
+APP             	?= gitlab-runner
+GITLAB_CI_TOKEN     ?= YjCsjCJzEaMxhAse_bhc

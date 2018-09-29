@@ -1,76 +1,16 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: gitlab-runner-cm
+  name: $APP
 data:
   config.toml: |
     concurrent = 4
-    check_interval = 1
 
     [[runners]]
-      name = "gitlab-docker-runner"
-      url = "https://$HOST/"
-      token = "$TOKEN"
+      name = "Kubernetes Runner"
+      url = "https://gitlab.com/ci"
+      token = "$GITLAB_TOKEN"
       executor = "kubernetes"
-    #   [runners.kubernetes]
-    #     namespace = "gitlab"
-    #     image = "busybox"
-      [runners.docker]
-        tls_verify = false
-        image = "python:3.5"
-        privileged = true
-        disable_cache = false
-        volumes = ["/cache"]
-    #   [runners.cache]
-    #     Type = "s3"
-    #     ServerAddress = "http://minio.gitlab/"
-    #     AccessKey = ""
-    #     SecretKey = ""
-    #     BucketName = "runner"
-    # concurrent = 4
-    # check_interval = 5
-    # [[runners]]
-
-    #     name = "Kubernetes Runner"
-    #     url = "https://$HOST/ci"
-    #     token = "$GITLAB_CI_TOKEN"
-    #     executor = "kubernetes"
-
-        # [runners.kubernetes]
-
-        #     host = "https://35.224.106.128"
-        #     cert_file = "/etc/ssl/kubernetes/api.crt"
-        #     key_file = "/etc/ssl/kubernetes/api.key"
-        #     ca_file = "/etc/ssl/kubernetes/ca.crt"
-        #     namespace = "gitlab"
-        #     namespace_overwrite_allowed = "ci-.*"
-        #     bearer_token_overwrite_allowed = true
-        #     privileged = true
-        #     cpu_limit = "1"
-        #     memory_limit = "1Gi"
-        #     service_cpu_limit = "1"
-        #     service_memory_limit = "1Gi"
-        #     helper_cpu_limit = "500m"
-        #     helper_memory_limit = "100Mi"
-        #     poll_interval = 5
-        #     poll_timeout = 3600
-
-        #     [runners.kubernetes.node_selector]
-
-        #         gitlab = "true"
-
-  entrypoint: |
-    #!/bin/bash
-
-    set -xe
-
-    cp /scripts/config.toml /etc/gitlab-runner/
-
-    # Register the runner
-    /entrypoint register --non-interactive \
-      --url https://$HOST/ \
-      --executor kubernetes
-
-    # Start the runner
-    /entrypoint run --user=gitlab-runner \
-      --working-directory=/home/gitlab-runner
+      [runners.kubernetes]
+        namespace = "$NS"
+        image = "busybox"
